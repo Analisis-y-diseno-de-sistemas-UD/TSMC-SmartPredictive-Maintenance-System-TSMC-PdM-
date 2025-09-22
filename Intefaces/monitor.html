@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Sensores en Tiempo Real</title>
+    <!-- Tailwind CSS para un diseño rápido y moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para la animación de pulso en las alertas */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .pulse-animation {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        /* Estilos para el modo oscuro opcional */
+        body.dark {
+            background-color: #111827;
+            color: #e5e7eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Encabezado -->
+        <header class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Sistema de Monitoreo Industrial</h1>
+            <p class="text-gray-600">Visualización de datos de sensores en tiempo real.</p>
+        </header>
+
+        <!-- Navegación de Pestañas -->
+        <div class="mb-6 border-b border-gray-300">
+            <nav class="flex space-x-4" aria-label="Tabs">
+                <button id="tab-realtime" class="tab-button text-blue-600 border-b-2 border-blue-600 px-3 py-2 text-sm font-medium">
+                    Monitoreo en Tiempo Real
+                </button>
+                <button id="tab-history" class="tab-button text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent px-3 py-2 text-sm font-medium">
+                    Datos Históricos
+                </button>
+            </nav>
+        </div>
+
+        <!-- Contenido Principal -->
+        <main>
+            <!-- Sección de Monitoreo en Tiempo Real -->
+            <div id="content-realtime">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Estado Actual de los Equipos</h2>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full leading-normal">
+                            <thead>
+                                <tr>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Sensor
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Valor Actual
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Unidad
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Estado
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Fila para Vibración -->
+                                <tr id="sensor-vibracion">
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap">Vibración</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap font-semibold" data-value="vibracion">--</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-600 whitespace-no-wrap">mm/s</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" data-status="vibracion">
+                                        <!-- El estado se insertará aquí -->
+                                    </td>
+                                </tr>
+                                <!-- Fila para Temperatura -->
+                                <tr id="sensor-temperatura">
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap">Temperatura</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap font-semibold" data-value="temperatura">--</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-600 whitespace-no-wrap">°C</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" data-status="temperatura">
+                                        <!-- El estado se insertará aquí -->
+                                    </td>
+                                </tr>
+                                <!-- Fila para Corriente -->
+                                <tr id="sensor-corriente">
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap">Corriente</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap font-semibold" data-value="corriente">--</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <p class="text-gray-600 whitespace-no-wrap">A</p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" data-status="corriente">
+                                        <!-- El estado se insertará aquí -->
+                                    </td>
+                                </tr>
+                                <!-- Fila para Presión -->
+                                <tr id="sensor-presion">
+                                    <td class="px-5 py-5 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap">Presión</p>
+                                    </td>
+                                    <td class="px-5 py-5 bg-white text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap font-semibold" data-value="presion">--</p>
+                                    </td>
+                                    <td class="px-5 py-5 bg-white text-sm">
+                                        <p class="text-gray-600 whitespace-no-wrap">psi</p>
+                                    </td>
+                                    <td class="px-5 py-5 bg-white text-sm" data-status="presion">
+                                        <!-- El estado se insertará aquí -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Datos Históricos (oculta por defecto) -->
+            <div id="content-history" class="hidden">
+                 <div class="bg-white shadow-md rounded-lg p-8 text-center">
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Consulta de Datos Históricos</h2>
+                    <p class="text-gray-600">Esta sección permitirá visualizar y exportar datos históricos de los sensores.</p>
+                    <p class="text-gray-500 mt-2">Funcionalidad en desarrollo.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- CONFIGURACIÓN DE SENSORES Y UMBRALES ---
+            const sensors = {
+                vibracion: { base: 1.5, variation: 0.5, threshold: 3.5, decimals: 2 },
+                temperatura: { base: 75, variation: 5, threshold: 90, decimals: 1 },
+                corriente: { base: 15, variation: 2, threshold: 19, decimals: 2 },
+                presion: { base: 100, variation: 10, threshold: 130, decimals: 0 }
+            };
+
+            const updateInterval = 2000; // Actualizar cada 2 segundos
+
+            // --- LÓGICA DE NAVEGACIÓN POR PESTAÑAS ---
+            const tabRealtime = document.getElementById('tab-realtime');
+            const tabHistory = document.getElementById('tab-history');
+            const contentRealtime = document.getElementById('content-realtime');
+            const contentHistory = document.getElementById('content-history');
+
+            function switchTab(activeTab) {
+                if (activeTab === 'realtime') {
+                    // Activar pestaña de tiempo real
+                    tabRealtime.classList.add('text-blue-600', 'border-blue-600');
+                    tabRealtime.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
+                    tabHistory.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
+                    tabHistory.classList.remove('text-blue-600', 'border-blue-600');
+                    contentRealtime.classList.remove('hidden');
+                    contentHistory.classList.add('hidden');
+                } else {
+                    // Activar pestaña de historial
+                    tabHistory.classList.add('text-blue-600', 'border-blue-600');
+                    tabHistory.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
+                    tabRealtime.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
+                    tabRealtime.classList.remove('text-blue-600', 'border-blue-600');
+                    contentHistory.classList.remove('hidden');
+                    contentRealtime.classList.add('hidden');
+                }
+            }
+
+            tabRealtime.addEventListener('click', () => switchTab('realtime'));
+            tabHistory.addEventListener('click', () => switchTab('history'));
+
+            // --- SIMULACIÓN DE DATOS EN TIEMPO REAL ---
+            function generateSensorValue(config) {
+                // Genera un valor aleatorio alrededor de una base
+                const value = config.base + (Math.random() - 0.5) * config.variation;
+                 // Ocasionalmente, fuerza un valor de alerta para demostración
+                if (Math.random() > 0.95) {
+                    return config.threshold + Math.random() * config.variation;
+                }
+                return value;
+            }
+
+            function updateSensorUI(sensorName, value, config) {
+                const valueElement = document.querySelector(`[data-value="${sensorName}"]`);
+                const statusElement = document.querySelector(`[data-status="${sensorName}"]`);
+
+                if (!valueElement || !statusElement) return;
+                
+                // Actualiza el valor numérico
+                valueElement.textContent = value.toFixed(config.decimals);
+
+                // Comprueba si el valor supera el umbral
+                if (value > config.threshold) {
+                    // Estado de Alerta
+                    statusElement.innerHTML = `
+                        <span class="relative inline-flex items-center">
+                            <span class="w-3 h-3 bg-red-500 rounded-full mr-2 pulse-animation"></span>
+                            <span class="font-semibold text-red-600">¡Alerta!</span>
+                        </span>
+                    `;
+                    // Opcional: añadir un borde de color a la fila
+                    valueElement.closest('tr').classList.add('bg-red-50');
+                } else {
+                    // Estado Normal
+                    statusElement.innerHTML = `
+                        <span class="relative inline-flex items-center">
+                            <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                            <span class="text-gray-700">Normal</span>
+                        </span>
+                    `;
+                    valueElement.closest('tr').classList.remove('bg-red-50');
+                }
+            }
+
+            function updateAllSensors() {
+                for (const sensorName in sensors) {
+                    const config = sensors[sensorName];
+                    const newValue = generateSensorValue(config);
+                    updateSensorUI(sensorName, newValue, config);
+                }
+            }
+
+            // Iniciar la simulación
+            updateAllSensors(); // Carga inicial
+            setInterval(updateAllSensors, updateInterval);
+        });
+    </script>
+
+</body>
+</html>
