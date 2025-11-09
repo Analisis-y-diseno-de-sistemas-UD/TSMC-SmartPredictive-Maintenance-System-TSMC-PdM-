@@ -10,23 +10,32 @@ public class Monitor {
             double vibracion = maquina.getVibracion();
             
             // Validar que los valores sean números válidos
-            if (Double.isNaN(temperatura) || Double.isNaN(vibracion) ||
-                Double.isInfinite(temperatura) || Double.isInfinite(vibracion)) {
-                return "Error: Valores inválidos";
+            if (Double.isNaN(temperatura) || Double.isNaN(vibracion)) {
+                return "Error: Valores NaN";
             }
             
-            // Validar que no sean negativos (si aplica en tu caso)
-            if (temperatura < 0 || vibracion < 0) {
-                return "Error: Valores negativos";
+            if (Double.isInfinite(temperatura) || Double.isInfinite(vibracion)) {
+                return "Error: Valores infinitos";
+            }
+            
+            // Verificar posibles desbordamientos antes del cálculo
+            if (Math.abs(temperatura) > Double.MAX_VALUE / 2 || 
+                Math.abs(vibracion) > Double.MAX_VALUE / 2) {
+                return "Error: Valores muy grandes para cálculo";
             }
             
             double promedio = (temperatura + vibracion) / 2;
             
             // Validar que el promedio sea un número válido
-            if (Double.isNaN(promedio) || Double.isInfinite(promedio)) {
-                return "Error: Promedio inválido";
+            if (Double.isNaN(promedio)) {
+                return "Error: Promedio NaN";
+            }
+            
+            if (Double.isInfinite(promedio)) {
+                return "Error: Promedio infinito";
             }
 
+            // Lógica original exactamente igual
             if (promedio <= 25) {
                 return "Verde";
             } else if (promedio <= 50) {
@@ -37,8 +46,10 @@ public class Monitor {
                 return "Rojo";
             }
             
+        } catch (NullPointerException e) {
+            return "Error: Método de máquina retorna null";
         } catch (Exception e) {
-            return "Error: Exception no controlada";
+            return "Error: Exception no controlada - " + e.getClass().getSimpleName();
         }
     }
 }
