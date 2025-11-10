@@ -1,6 +1,6 @@
 package org.example;
 public class Monitor {
-
+ 
     public String evaluarEstado(Maquina maquina) {
         if (maquina == null) {
             return "Error: Máquina nula";
