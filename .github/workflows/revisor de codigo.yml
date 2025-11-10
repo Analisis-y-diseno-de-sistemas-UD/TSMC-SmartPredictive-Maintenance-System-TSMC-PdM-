@@ -1,0 +1,25 @@
+name: Verificardor de codigo
+
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: windows-lastest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Setup python
+      uses: actions/setup-pyhton@v5
+      with:
+        python-version: '3.11'
+        
+    - name: run Script
+      run: python .github/workflows/revisordecodigo.py
+
+    - name: Commit and push 
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        name: Resultado de codigo
