@@ -26,4 +26,5 @@ jobs:
           distribution: 'temurin'
 
       - name: Run tests with Maven
-        run: mvn -B test
+        working-directory: unit_test 
+        run: mvn -B clean test
