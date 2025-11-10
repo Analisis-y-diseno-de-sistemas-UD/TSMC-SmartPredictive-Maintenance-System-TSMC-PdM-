@@ -1,36 +1,37 @@
+package org.example;
 public class Monitor {
 
     public String evaluarEstado(Maquina maquina) {
         if (maquina == null) {
             return "Error: Máquina nula";
         }
-        
+
         try {
             double temperatura = maquina.getTemperatura();
             double vibracion = maquina.getVibracion();
-            
+
             // Validar que los valores sean números válidos
             if (Double.isNaN(temperatura) || Double.isNaN(vibracion)) {
                 return "Error: Valores NaN";
             }
-            
+
             if (Double.isInfinite(temperatura) || Double.isInfinite(vibracion)) {
                 return "Error: Valores infinitos";
             }
-            
+
             // Verificar posibles desbordamientos antes del cálculo
-            if (Math.abs(temperatura) > Double.MAX_VALUE / 2 || 
-                Math.abs(vibracion) > Double.MAX_VALUE / 2) {
+            if (Math.abs(temperatura) > Double.MAX_VALUE / 2 ||
+                    Math.abs(vibracion) > Double.MAX_VALUE / 2) {
                 return "Error: Valores muy grandes para cálculo";
             }
-            
+
             double promedio = (temperatura + vibracion) / 2;
-            
+
             // Validar que el promedio sea un número válido
             if (Double.isNaN(promedio)) {
                 return "Error: Promedio NaN";
             }
-            
+
             if (Double.isInfinite(promedio)) {
                 return "Error: Promedio infinito";
             }
@@ -45,7 +46,7 @@ public class Monitor {
             } else {
                 return "Rojo";
             }
-            
+
         } catch (NullPointerException e) {
             return "Error: Método de máquina retorna null";
         } catch (Exception e) {

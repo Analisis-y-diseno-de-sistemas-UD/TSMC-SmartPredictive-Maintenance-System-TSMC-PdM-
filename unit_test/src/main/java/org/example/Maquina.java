@@ -1,4 +1,12 @@
-public class Maquina {
+package org.example;
+
+public class Maquina
+
+
+
+{
+
+
     private String fechaInstalacion;
     private String tiempoEnProduccion;
     private String nombre;
@@ -72,4 +80,5 @@ public class Maquina {
     public void setFechasMantenimiento(String[] fechasMantenimiento) {
         this.fechasMantenimiento = fechasMantenimiento;
     }
+
 }
