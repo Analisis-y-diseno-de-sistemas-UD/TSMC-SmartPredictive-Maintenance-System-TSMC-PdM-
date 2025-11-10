@@ -1,12 +1,13 @@
-
+package org.example;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import javax.management.monitor.Monitor;
+import org.example.Monitor;
+import org.example.Maquina;
 
 
-public class test {
+public class MonitorTest {
 
     @Test
     public void testEvaluarestado_naranja(){
