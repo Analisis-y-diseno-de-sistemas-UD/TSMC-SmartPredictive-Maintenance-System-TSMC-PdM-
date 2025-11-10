@@ -36,7 +36,7 @@ public class Monitor {
                 return "Error: Promedio infinito";
             }
 
-            // Lógica original exactamente igual
+            
             if (promedio <= 25) {
                 return "Verde";
             } else if (promedio <= 50) {
